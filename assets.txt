@@ -1,0 +1,75 @@
+Godot Asset Strategy: Arcana Ascension
+
+1. The Modular Card System
+
+Do not create unique textures for every card tier. Instead, build a Single Card Scene in Godot that uses layers.
+
+Layer Stack:
+
+The Base: A single parchment texture shared by all Common cards.
+
+The Art: One black-and-white ink drawing per Tarot card (78 total).
+
+The Color: Use Godot's Modulate or a shader to add color based on the card's suit.
+
+The Tier Overlay: This is where the magic happens. Use Shaders, not images.
+
+2. Shader-Based Rarity Tiers
+
+Instead of 8 different images per card, create 8 Materials.
+
+Tier
+
+Godot Implementation
+
+Common
+
+Simple CanvasItem material. No extra cost.
+
+Rare
+
+A "MatCap" shader for gold foil that reacts to the card's tilt (using Input.get_gyroscope() or mouse position).
+
+Epic
+
+A simple UV-scrolling shader for wind/weather effects over the Art layer.
+
+Cosmic
+
+A "Noise" shader generating a moving nebula. Mask it so it only shows in the background of the art.
+
+Fractal
+
+A recursive fragment shader. This is purely code-based and requires zero textures.
+
+3. The Architect’s Suite (Customization)
+
+Since you want players to build their own cards, use Godot's ViewportTexture or SubViewport.
+
+The player picks a Font, a Character, and a Pip.
+
+Godot renders these into a single texture at runtime.
+
+You only store the recipe (the IDs of the parts) in your save data, not the actual image.
+
+4. Integrity and Damage
+
+Do not draw "cracked" versions of cards.
+
+Create one Cracked Overlay (a transparent PNG of spiderweb fractures).
+
+Use a shader to "Alpha Clip" the card art where the cracks are.
+
+Increase the crack_intensity variable in the shader as pips are lost.
+
+5. Summary of Required Assets
+
+78 Art Assets: 1 per Tarot card (keep them as grayscale PNGs).
+
+4 Pip Assets: Cups, Swords, Wands, Pentacles.
+
+8 Shader Files: One for each prestige tier.
+
+5 Audio Clips: Snap, Slide, Flip, Fracture, and Soul Tally.
+
+Total unique image files: ~85. The rest is code.
